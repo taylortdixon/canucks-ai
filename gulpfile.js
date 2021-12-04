@@ -1,14 +1,8 @@
-const { src, dest } = require("gulp");
+const { src, dest, task } = require("gulp");
 var replace = require("gulp-replace");
 var dayjs = require("dayjs");
 var rename = require("gulp-rename");
 var exec = require("gulp-exec");
-
-const [, , , _textflag, text, _userflag, user] = process.argv;
-
-if (!text) {
-  throw new Error("Expected cli parameter for tweet text.");
-}
 
 const userConfig = {
   taj: {
@@ -61,7 +55,7 @@ const userConfig = {
   },
 };
 
-function generateTask(cb) {
+function generateTask(user, text) {
   const day = dayjs();
   const selectedUser = userConfig[user];
 
@@ -88,7 +82,7 @@ function generateTask(cb) {
     .pipe(dest("output/html/"))
     .pipe(
       exec(
-        "wkhtmltoimage --crop-w 550 --quality 99 " +
+        "wkhtmltoimage --crop-w 575 --quality 99 " +
           " ./output/html/" +
           filename +
           ".html ./output/" +
@@ -98,8 +92,15 @@ function generateTask(cb) {
     );
 }
 
-exports.generate = generateTask;
+function defaultTask(cb) {
+  require("fs").readFile("input.txt", "utf8", function (e, data) {
+    data.split("\n").map(function (line) {
+      const [user, text] = line.split(": ");
+      generateTask(user, text);
+    });
 
-function defaultTask(cb) {}
+    cb();
+  });
+}
 
 exports.default = defaultTask;
