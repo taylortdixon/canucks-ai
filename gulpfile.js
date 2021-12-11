@@ -53,11 +53,47 @@ const userConfig = {
     profile:
       "https://pbs.twimg.com/profile_images/1219683243978412032/210zOrqY_200x200.jpg",
   },
+  imac: {
+    name: "Iain MacIntyre",
+    username: "imacSportsnet",
+    profile:
+      "https://pbs.twimg.com/profile_images/1303940174024290305/34JZzZuX_200x200.jpg",
+  },
+  pj: {
+    name: "Patrick Johnston",
+    username: "risingaction",
+    profile:
+      "https://pbs.twimg.com/profile_images/917129153496866817/HBiwQWvf_200x200.jpg",
+  },
+  harm: {
+    name: "Harman Dayal",
+    username: "harmandayal2",
+    profile:
+      "https://pbs.twimg.com/profile_images/1352939571281944576/p9ChX39U_200x200.jpg",
+  },
+  murph: {
+    name: "Dan Murphy",
+    username: "sportsnetmurph",
+    profile:
+      "https://pbs.twimg.com/profile_images/1444468737243955201/kdMcmnrJ_200x200.jpg",
+  },
+  sekeres: {
+    name: "Matt Sekeres",
+    username: "mattsekeres",
+    profile:
+      "https://pbs.twimg.com/profile_images/1379181917472399362/eAMS9pz5_200x200.jpg",
+  },
+  price: {
+    name: "Blake Price",
+    username: "justBlakePrice",
+    profile:
+      "https://pbs.twimg.com/profile_images/1378771300697563137/vtte3X3a_200x200.jpg",
+  },
 };
 
 function generateTask(user, text) {
   const day = dayjs();
-  const selectedUser = userConfig[user];
+  const selectedUser = userConfig[user.toLowerCase()];
 
   if (!selectedUser) {
     throw new Error('Unknown user "' + user + '"');
@@ -95,8 +131,8 @@ function generateTask(user, text) {
 function defaultTask(cb) {
   require("fs").readFile("input.txt", "utf8", function (e, data) {
     data.split("\n").map(function (line) {
-      const [user, text] = line.split(": ");
-      generateTask(user, text);
+      const [user, ...text] = line.split(": ");
+      generateTask(user, text.join(": "));
     });
 
     cb();
