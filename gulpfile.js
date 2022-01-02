@@ -69,7 +69,7 @@ const userConfig = {
     name: "Harman Dayal",
     username: "harmandayal2",
     profile:
-      "https://pbs.twimg.com/profile_images/1352939571281944576/p9ChX39U_200x200.jpg",
+      "https://pbs.twimg.com/profile_images/1469617244954980356/HmDrZWF-_200x200.jpg",
   },
   murph: {
     name: "Dan Murphy",
@@ -102,10 +102,20 @@ function generateTask(user, text) {
   const timestamp =
     day.format("h:mm A") + " &middot; " + day.format("DD/MM/YYYY");
 
-  const filename = user + "-" + day.valueOf();
+  const filename =
+    user +
+    "-" +
+    text
+      .match(/([a-z]+)/gi)
+      .slice(0, 3)
+      .join("-") +
+    "-" +
+    day.valueOf();
+
+  const asciiText = text.replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
 
   return src("template/index.html")
-    .pipe(replace(/\|INPUT\-TEXT\|/g, text))
+    .pipe(replace(/\|INPUT\-TEXT\|/g, asciiText))
     .pipe(replace(/\|INPUT\-DATE\|/g, timestamp))
     .pipe(replace(/\|INPUT\-IMG\|/g, selectedUser.profile))
     .pipe(replace(/\|INPUT\-NAME\|/g, selectedUser.name))
